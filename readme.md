@@ -26,15 +26,15 @@ epc.startServer().then(function(server) {
 ### Emacs Lisp code (client process)
 
 This elisp code calls the server process.
-The package `epc` is required.
+The emacs package `epc` is required.
 
 `echo-client.el`
 ```el
 (require 'epc)
 
 (let (epc)
-  ;; start a server process (using bundle exec)
-  (setq epc (epc:start-epc "bundle" '("node" "echo.js")))
+  ;; start a server process
+  (setq epc (epc:start-epc "node" '("echo.js")))
 
   (deferred:$
     (epc:call-deferred epc 'echo '("hello"))
