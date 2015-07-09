@@ -9,7 +9,8 @@ Using `elrpc`, you can develop an emacs extension in JavaScript.
 
 ### JavaScript code (server process)
 
-This code is started by the client process, such as Emacs Lisp.
+This sample code defines a simple echo method.
+Emacs starts this code as child process.
 
 `echo.js`
 ```javascript
@@ -25,31 +26,31 @@ epc.startServer().then(function(server) {
 
 ### Emacs Lisp code (client process)
 
-This elisp code calls the server process.
-The emacs package `epc` is required.
+This elisp code starts a child process and calls the echo method.
 
 `echo-client.el`
 ```el
 (require 'epc)
 
-(let (epc)
-  ;; start a server process
-  (setq epc (epc:start-epc "node" '("echo.js")))
+;; eval each s-exp one by one, such as `eval-last-sexp'
 
-  (deferred:$
-    (epc:call-deferred epc 'echo '("hello"))
-    (deferred:nextc it 
-      (lambda (x) (message "Return : %S" x))))
+;; start a child process and establish the connection
+(setq epc (epc:start-epc "node" '("echo.js")))
 
-  (message "%S" (epc:call-sync epc 'echo '(world)))
- ) ; just `eval-last-sexp' here
+;; call the echo method
+(deferred:$
+  (epc:call-deferred epc 'echo '("hello"))
+  (deferred:nextc it 
+    (lambda (x) (message "Return : %S" x))))
+
+(message "%S" (epc:call-sync epc 'echo '(world)))
 
 (epc:stop-epc epc) ; dispose EPC stack and peer process
 ```
 
 ### JavaScript code (client process)
 
-You can also write the client process code in JavaScript.
+You can also connect between JavaScript processes.
 
 `echo-client.js`
 ```javascript
@@ -142,8 +143,8 @@ elrpc.startServer().then(function(server){
         - `argdoc` : String[optional]. Argument information for human.
         - `docstring` : String[optional]. Method information for human.
 
-The return value of the code block is serialized and sent to the peer process.
-If the code block returns a promise object, the EPC stack waits for the return object which is wrapped by promise and serializes it and sent to the peer process.
+During execution of the code block, the arguments and return values are serialized and sent to the peer process.
+If the code block returns a promise object, the EPC stack waits for the return object which is wrapped by promise. After the promise is resolved, the EPC stack serializes the object and sent to the peer process.
 
 If the return value includes wrong values which can't be serialized by `elparser`, the runtime exception `EPCStackException` is thrown to the method calling of the peer process.
 
@@ -162,8 +163,6 @@ server.defineMethod("reduce", function(init, body, list) {
 ```
 
 ### Calling Remote Method
-
-If the peer process defines some methods, the instance of `RPCServer` can call the peer's method, regardless of the server process or the client one. (See the EPC document.)
 
 - `RPCServer#callMethod(name, arg1, arg2, ...)`
     - Synchronous method calling. The current thread is blocked until the calling result is returned.
@@ -197,6 +196,8 @@ server.callMethod("add", 1, 2).then(function(ret) {
 // => 10
 // => ABCD
 ```
+
+The both server and client processes can call the peer's method.
 
 ### Utilities
 
