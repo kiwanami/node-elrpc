@@ -201,3 +201,29 @@ describe("05 Query", function() {
 		});
 	});
 });
+
+describe('06 Echo Async', function() {
+
+    it('should echo a message asynchronously.', function(done) {
+        withEPC('_async.js', function(client) {
+            return client.callMethod('echo', 'hello').then(function(ret) {
+                assert.ok(ret !== null);
+                assert.ok(typeof(ret) == 'string');
+                assert.equal(ret, 'hello');
+                return client.callMethod('echo', 12345);
+            }).then(function(ret) {
+                assert.ok(typeof(ret) == 'number');
+                assert.equal(ret, 12345);
+                return client.callMethod('echo', [1, '2', 3.2, false]);
+            }).then(function(ret) {
+                assert.ok(ret instanceof Array);
+                assert.deepEqual(ret, [1, '2', 3.2, null]); // false -> null
+            });
+        }).then(function() {
+            done();
+        }, function(err) {
+            done(err);
+        });
+    });
+
+});
