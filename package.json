@@ -20,7 +20,7 @@
     "dependencies": {
         "elparser": "*",
         "bluebird": "~2",
-        "log4js": "~0.6"
+        "log4js": "~0.6",
         "p-is-promise": "^1.1.0"
     },
     "devDependencies": {
