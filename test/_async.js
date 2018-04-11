@@ -8,7 +8,7 @@ epc.startServer([], 8888).then(function(server) {
 		return new Promise(function(resolve) {
 			setTimeout(function() {
 				resolve(args);
-			}, 333);
+			}, 0);
 		});
 	});
 	server.wait();

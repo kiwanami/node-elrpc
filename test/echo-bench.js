@@ -1,7 +1,7 @@
 // -*- coding: utf-8; -*-
 
+var reduceAsync = require("p-reduce");
 var epc = require("../index.js");
-var Promise = require("bluebird");
 
 //var profiler = require('v8-profiler');
 
@@ -60,7 +60,7 @@ epc.startProcess(["node", "./test/_echo.js"]).then(function(cl) {
 		{title: 'hash', data: hash},
 	];
 
-	Promise.reduce(src.concat(src), function(sum, elt) {
+	reduceAsync(src.concat(src), function(sum, elt) {
 		return benchmark(cl, elt.title, elt.data, n);
 	}, Promise.resolve()).then(function() {
 		cl.stop();
