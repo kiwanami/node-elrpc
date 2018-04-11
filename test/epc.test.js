@@ -1,7 +1,6 @@
 // -*- coding: utf-8; -*-
 
 var assert = require('power-assert');
-var Promise = require('bluebird');
 var spawn = require('child_process').spawn;
 var epc = require('../index.js');
 

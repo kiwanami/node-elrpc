@@ -4,8 +4,8 @@
     "description": "EPC (RPC Stack for Emacs Lisp) for NodeJS",
     "homepage": "https://github.com/kiwanami/node-elrpc",
     "repository": {
-        "type" : "git",
-        "url" : "https://github.com/kiwanami/node-elrpc.git"
+        "type": "git",
+        "url": "https://github.com/kiwanami/node-elrpc.git"
     },
     "private": false,
     "scripts": {
@@ -13,19 +13,23 @@
         "bench": "node ./test/echo-bench.js"
     },
     "keywords": [
-        "emacs", "rpc"
+        "emacs",
+        "rpc"
     ],
     "author": "SAKURAI Masashi",
     "license": "MIT",
+    "engines": {
+        "node": ">= 0.11.13"
+    },
     "dependencies": {
         "elparser": "*",
-        "bluebird": "~2",
         "log4js": "~0.6",
         "p-is-promise": "^1.1.0"
     },
     "devDependencies": {
+        "intelli-espower-loader": "*",
         "mocha": "~2",
-        "power-assert": "*",
-        "intelli-espower-loader": "*"
+        "p-reduce": "^1.0.0",
+        "power-assert": "*"
     }
 }
